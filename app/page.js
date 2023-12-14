@@ -1,95 +1,86 @@
+//'use client'
+import {useContext} from 'react'
 import Image from 'next/image'
 import styles from './page.module.css'
+import { projectFirestore } from '@/firebaseConfig';
+import {collection, getDocs} from 'firebase/firestore';
+//import Card from 'react-bootstrap/Card'
+import { getUsers } from '@/lib/collections';
+import Link from 'next/link'
+import HomePage from '@/components/HomePage';
+//import { AuthContext } from '@/context/AuthContext';
 
-export default function Home() {
+
+export default async function Home({ data }) {
+//const { currentUser } = useContext(AuthContext);
+
+
+
+//normal client side fetching
+
+/*   useEffect(()=>{
+  let results=[];
+  const fetchData = async () => {
+  const querySnapshot = await getDocs(collection(projectFirestore, "users"));
+  querySnapshot.docs.map((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    results.push({id: doc.id, ...doc.data()});
+  });
+  console.log(results);
+  setMyData(results);
+}
+fetchData()
+  },[]) */
+
+
+// **function to call when rendered as SS Component **
+ const myData = await getUsers();
+
+
+
+console.log(myData)
+
+  
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <main>
+      <br/>
+      <br/>
+      <HomePage myData={myData} />
+      
+      
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
     </main>
   )
 }
+
+
+
+
+
+/* export async function getServerSideProps() {
+  const db = projectFirestore;
+  const collectionRef = await getDocs(collection(db,'users'));
+
+  try {
+    const snapshot = collectionRef;
+
+    // Map the Firestore document data to an array
+    const data = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return {
+      props: {
+        data,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return {
+      props: {
+        data: [],
+      },
+    };
+  }
+} */
